@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from unidecode import unidecode
 import json
 
 # One use script, use it to save all the districts data on the utility database
@@ -31,6 +32,7 @@ for district in paths:
             data = json.load(file)
 
             for j in data:
+                j["uuid"] = unidecode(j["name"]).upper()
                 j["city"] = district["city"]
                 districts_data.append(j)
         except json.JSONDecodeError as e:
