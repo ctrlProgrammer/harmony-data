@@ -1,6 +1,7 @@
 package api
 
 import (
+	"auth/api/database"
 	"net/http"
 	"os"
 
@@ -17,7 +18,58 @@ type API struct {
 // SECTION - Data
 
 func (api *API) getSellers(c *gin.Context) {
+	results, err := database.GetSellers(api.database)
 
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"error": false, "data": results})
+}
+
+func (api *API) getSellersByDistrict(c *gin.Context) {
+	results, err := database.GetSellersByCity(api.database, c.Param("city"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"error": false, "data": results})
+}
+
+func (api *API) getSellersByCity(c *gin.Context) {
+	results, err := database.GetSellersByDistrict(api.database, c.Param("city"), c.Param("district"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"error": false, "data": results})
+}
+
+func (api *API) getDistricts(c *gin.Context) {
+	results, err := database.GetDistricts(api.database)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"error": false, "data": results})
+}
+
+func (api *API) getDistrictsByCity(c *gin.Context) {
+	results, err := database.GetDistrictsByCity(api.database, c.Param("city"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"error": false, "data": results})
 }
 
 func (api *API) createRoutes() {
@@ -28,8 +80,24 @@ func (api *API) createRoutes() {
 	})
 
 	// API - GET - /sellers
-	// get all sellers
+	// This methods will use front and back cache to reduce the database load based on request
 	api.ValidatedGet("/sellers", api.getSellers)
+
+	// API - GET - /sellers-by-district/:district
+	// This methods will use front and back cache to reduce the database load based on request
+	api.ValidatedGet("/sellers-by-district/:district", api.getSellersByDistrict)
+
+	// API - GET - /sellers-by-city/:city
+	// This methods will use front and back cache to reduce the database load based on request
+	api.ValidatedGet("/sellers-by-city/:city", api.getSellersByCity)
+
+	// API - GET - /districts
+	// The information will be considered static so it will use a simple cache method
+	api.ValidatedGet("/districts", api.getDistricts)
+
+	// API - GET - /districts/:city
+	// The information will be considered static so it will use a simple cache method
+	api.ValidatedGet("/districts/:city", api.getDistrictsByCity)
 
 	api.logger.Info("Initilizing routes")
 }

@@ -4,22 +4,11 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
 const (
 	ALOWED_ORIGINS = "http://localhost:3000,https://harmony.businessbuilders.city,https://api.harmony.businessbuilders.city, https://data.harmony.businessbuilders.city"
 )
-
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
-}
-
-func VerifyPassword(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
 
 func IsOriginAllowed(origin string) bool {
 	allowedOrigins := strings.Split(ALOWED_ORIGINS, ",")
