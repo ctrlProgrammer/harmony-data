@@ -47,9 +47,6 @@ try:
     collection = db[COLLECTION_NAME]
 
     result = collection.insert_many(districts_data)
-
-    print(f"Data inserted with ID: {result.inserted_ids}")
-
 except Exception as e:
     print("Error connecting to MongoDB:", e)
 

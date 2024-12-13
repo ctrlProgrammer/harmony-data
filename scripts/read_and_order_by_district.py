@@ -5,7 +5,7 @@ from unidecode import unidecode
 
 MONGO_URI = "mongodb://localhost:27017/"
 DATABASE_NAME = "harmony_data"
-COLLECTION_NAME = "districts"
+COLLECTION_NAME = "sellers"
 
 paths = [
     {
@@ -99,6 +99,22 @@ with open("./scripts/data/data.json", "r", encoding="utf-8") as file:
                     if distance * 1000 < district["radius"]:
                         seller["district"] = unidecode(district["name"]).upper()
                         sellers_ordered.append(seller)
+
+        try:
+            client = MongoClient(MONGO_URI)
+
+            print("Connected")
+
+            db = client[DATABASE_NAME]
+            collection = db[COLLECTION_NAME]
+
+            result = collection.insert_many(sellers_ordered)
+        except Exception as e:
+            print("Error connecting to MongoDB:", e)
+
+        finally:
+            client.close()
+            print("Connection closed")
 
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
