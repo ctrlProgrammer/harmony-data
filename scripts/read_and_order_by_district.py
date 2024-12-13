@@ -3,6 +3,10 @@ import json
 import math
 from unidecode import unidecode
 
+# It is a one use script, it will works to fill the database with all the sellers
+# the principal purpose of that is separate the sellers by each district using the latitude and longitude, if the seller is on the district radius
+# the script will save it with the district label, it will reduce the load of the front end by loading only the necessary data
+
 MONGO_URI = "mongodb://localhost:27017/"
 DATABASE_NAME = "harmony_data"
 COLLECTION_NAME = "sellers"
