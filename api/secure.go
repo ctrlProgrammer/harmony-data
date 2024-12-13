@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	ALOWED_ORIGINS = "http://localhost:3000,https://harmony.businessbuilders.city,https://api.harmony.businessbuilders.city, https://data.harmony.businessbuilders.city"
+	ALOWED_ORIGINS = "http://localhost:3000,https://harmony.businessbuilders.city,https://api.harmony.businessbuilders.city,https://data.harmony.businessbuilders.city"
 )
 
 func IsOriginAllowed(origin string) bool {
