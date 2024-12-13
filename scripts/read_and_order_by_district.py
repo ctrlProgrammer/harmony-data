@@ -108,7 +108,7 @@ with open("./scripts/data/data.json", "r", encoding="utf-8") as file:
             db = client[DATABASE_NAME]
             collection = db[COLLECTION_NAME]
 
-            result = collection.insert_many(sellers_ordered)
+            result = collection.insert_many(sellers_ordered, ordered=False)
         except Exception as e:
             print("Error connecting to MongoDB:", e)
 
