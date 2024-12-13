@@ -29,7 +29,7 @@ func (api *API) getSellers(c *gin.Context) {
 }
 
 func (api *API) getSellersByDistrict(c *gin.Context) {
-	results, err := database.GetSellersByCity(api.database, c.Param("city"))
+	results, err := database.GetSellersByDistrict(api.database, c.Param("city"), c.Param("district"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -40,7 +40,7 @@ func (api *API) getSellersByDistrict(c *gin.Context) {
 }
 
 func (api *API) getSellersByCity(c *gin.Context) {
-	results, err := database.GetSellersByDistrict(api.database, c.Param("city"), c.Param("district"))
+	results, err := database.GetSellersByCity(api.database, c.Param("city"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -85,7 +85,7 @@ func (api *API) createRoutes() {
 
 	// API - GET - /sellers-by-district/:district
 	// This methods will use front and back cache to reduce the database load based on request
-	api.ValidatedGet("/sellers-by-district/:district", api.getSellersByDistrict)
+	api.ValidatedGet("/sellers-by-district/:city/:district", api.getSellersByDistrict)
 
 	// API - GET - /sellers-by-city/:city
 	// This methods will use front and back cache to reduce the database load based on request

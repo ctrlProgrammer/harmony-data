@@ -31,7 +31,7 @@ func GetDistricts(database *mongo.Database) ([]types.District, error) {
 }
 
 func GetDistrictsByCity(database *mongo.Database, city string) ([]types.District, error) {
-	col := database.Collection(COLLECTION_SELLERS)
+	col := database.Collection(COLLECTION_DISTRICTS)
 
 	cursor, err := col.Find(context.Background(), bson.M{"city": city})
 
